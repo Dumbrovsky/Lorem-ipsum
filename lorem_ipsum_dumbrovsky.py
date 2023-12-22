@@ -33,21 +33,41 @@ slovnik = [
     "vlastně", "vy", "vždy", "za","zač", "či", "zatímco", "ze", "že"
 ]
 
-pocet_vet = int(input("Zadejte počet vět v odstavci: "))
-pocet_odstavcu = int(input("Zadejte počet odstavců: "))
-text = ""
-for _ in range(pocet_odstavcu):
-    for _ in range(pocet_vet):
-        predchozi_slovo = None
-        veta = []
-        for i in range(5):
-            while True:
-                slovo = random.choice(slovnik)
-                if slovo != predchozi_slovo:
-                    break
-            veta.append(slovo.capitalize() if i == 0 else slovo)
-            predchozi_slovo = slovo
-        text += ' '.join(veta) + random.choice(['.', '!', '?']) + ' '
-    text += "\n\n"
+volba = input("Chcete určit počet slov (S) nebo počet odstavců a vět (O)? ")
 
-print(text)
+if volba.lower() == 's':
+    pocet_slov = int(input("Zadejte počet slov: "))
+    text = ""
+    predchozi_slovo = None
+    for i in range(pocet_slov):
+        while True:
+            slovo = random.choice(slovnik)
+            if slovo != predchozi_slovo:
+                break
+        text += (slovo.capitalize() if i == 0 or text[-1] in ['.', '!', '?'] else ' ' + slovo)
+        predchozi_slovo = slovo
+        if i % 10 == 9:
+            text += random.choice(['.', '!', '?']) + ' '
+            if i < pocet_slov - 1:  # Pokud to není poslední slovo
+                text += ' ' + random.choice(slovnik).capitalize() + ' '
+                i += 1
+    print(text)
+else:
+    pocet_vet = int(input("Zadejte počet vět v odstavci: "))
+    pocet_odstavcu = int(input("Zadejte počet odstavců: "))
+    text = ""
+    for _ in range(pocet_odstavcu):
+        for _ in range(pocet_vet):
+            predchozi_slovo = None
+            veta = []
+            pocet_slov = random.randint(3, 10)  # Náhodný počet slov ve větě
+            for i in range(pocet_slov):
+                while True:
+                    slovo = random.choice(slovnik)
+                    if slovo != predchozi_slovo:
+                        break
+                veta.append(slovo.capitalize() if i == 0 else slovo)
+                predchozi_slovo = slovo
+            text += ' '.join(veta) + random.choice(['.', '!', '?']) + ' '
+        text += "\n\n"
+    print(text)
